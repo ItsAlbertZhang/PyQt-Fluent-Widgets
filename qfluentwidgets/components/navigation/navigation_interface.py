@@ -36,8 +36,8 @@ class NavigationInterface(QWidget):
         self.panel.installEventFilter(self)
         self.panel.displayModeChanged.connect(self.displayModeChanged)
 
-        self.resize(48, self.height())
-        self.setMinimumWidth(48)
+        self.resize(66, self.height())
+        self.setMinimumWidth(66)
         self.setAttribute(Qt.WA_StyledBackground)
         FluentStyleSheet.NAVIGATION_INTERFACE.apply(self)
 

@@ -20,14 +20,17 @@ class Ui_MessageBox:
     def __init__(self, *args, **kwargs):
         pass
 
-    def _setUpUi(self, title, content, parent):
+    def _setUpUi(self, title, content, parent, yesButtonText=None, cancelButtonText=None):
         self.content = content
         self.titleLabel = QLabel(title, parent)
-        self.contentLabel = QLabel(content, parent)
+        if type(self.content) == str:
+            self.contentLabel = QLabel(content, parent)
+        else:
+            self.contentLabel = content
 
         self.buttonGroup = QFrame(parent)
-        self.yesButton = PrimaryPushButton(self.tr('OK'), self.buttonGroup)
-        self.cancelButton = QPushButton(self.tr('Cancel'), self.buttonGroup)
+        self.yesButton = PrimaryPushButton(self.tr('OK') if yesButtonText is None else yesButtonText, self.buttonGroup)
+        self.cancelButton = QPushButton(self.tr('Cancel') if cancelButtonText is None else cancelButtonText, self.buttonGroup)
 
         self.vBoxLayout = QVBoxLayout(parent)
         self.textLayout = QVBoxLayout()
@@ -62,7 +65,8 @@ class Ui_MessageBox:
             w = max(self.titleLabel.width(), self.window().width())
             chars = max(min(w / 9, 100), 30)
 
-        self.contentLabel.setText(TextWrap.wrap(self.content, chars, False)[0])
+        if type(self.content) == str:
+            self.contentLabel.setText(TextWrap.wrap(self.content, chars, False)[0])
 
     def __initLayout(self):
         self.vBoxLayout.setSpacing(0)
@@ -133,9 +137,9 @@ class MessageBox(MaskDialogBase, Ui_MessageBox):
     yesSignal = Signal()
     cancelSignal = Signal()
 
-    def __init__(self, title: str, content: str, parent=None):
+    def __init__(self, title: str, content, parent=None, yesButtonText=None, cancelButtonText=None):
         super().__init__(parent=parent)
-        self._setUpUi(title, content, self.widget)
+        self._setUpUi(title, content, self.widget, yesButtonText, cancelButtonText)
 
         self.setShadowEffect(60, (0, 10), QColor(0, 0, 0, 50))
         self.setMaskColor(QColor(0, 0, 0, 76))

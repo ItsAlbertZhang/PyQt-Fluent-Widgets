@@ -24,7 +24,7 @@ class NavigationWidget(QWidget):
         self.isPressed = False
         self.isEnter = False
         self.isSelectable = isSelectable
-        self.setFixedSize(40, 36)
+        self.setFixedSize(60, 60)
 
     def enterEvent(self, e):
         self.isEnter = True
@@ -51,9 +51,9 @@ class NavigationWidget(QWidget):
 
         self.isCompacted = isCompacted
         if isCompacted:
-            self.setFixedSize(40, 36)
+            self.setFixedSize(60, 60)
         else:
-            self.setFixedSize(self.EXPAND_WIDTH, 36)
+            self.setFixedSize(self.EXPAND_WIDTH, 60)
 
         self.update()
 
@@ -111,22 +111,22 @@ class NavigationPushButton(NavigationWidget):
         c = 255 if isDarkTheme() else 0
         if self.isSelected:
             painter.setBrush(QColor(c, c, c, 6 if self.isEnter else 10))
-            painter.drawRoundedRect(self.rect(), 5, 5)
+            painter.drawRoundedRect(self.rect(), 10, 10)
 
             # draw indicator
             painter.setBrush(themeColor())
-            painter.drawRoundedRect(0, 10, 3, 16, 1.5, 1.5)
+            painter.drawRoundedRect(3, 15, 4, 30, 2, 2)
         elif self.isEnter and self.isEnabled():
             painter.setBrush(QColor(c, c, c, 10))
-            painter.drawRoundedRect(self.rect(), 5, 5)
+            painter.drawRoundedRect(self.rect(), 10, 10)
 
-        drawIcon(self.icon, painter, QRectF(11.5, 10, 16, 16))
+        drawIcon(self.icon, painter, QRectF(15, 15, 30, 30))
 
         # draw text
         if not self.isCompacted:
             painter.setFont(self.font())
             painter.setPen(QColor(c, c, c))
-            painter.drawText(QRect(44, 0, self.width()-57,
+            painter.drawText(QRect(66, 0, self.width()-66,
                              self.height()), Qt.AlignVCenter, self.text())
 
 
@@ -149,7 +149,7 @@ class NavigationSeparator(NavigationWidget):
 
     def setCompacted(self, isCompacted: bool):
         if isCompacted:
-            self.setFixedSize(48, 3)
+            self.setFixedSize(66, 3)
         else:
             self.setFixedSize(self.EXPAND_WIDTH + 10, 3)
 

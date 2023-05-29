@@ -64,7 +64,7 @@ class NavigationPanel(QFrame):
         self.history = NavigationHistory(self.items)
 
         self.expandAni = QPropertyAnimation(self, b'geometry', self)
-        self.expandWidth = 322
+        self.expandWidth = 175
 
         self.isMinimalEnabled = isMinimalEnabled
         if isMinimalEnabled:
@@ -75,7 +75,7 @@ class NavigationPanel(QFrame):
         self.__initWidget()
 
     def __initWidget(self):
-        self.resize(48, self.height())
+        self.resize(66, self.height())
         self.setAttribute(Qt.WA_StyledBackground)
         self.window().installEventFilter(self)
 
@@ -96,10 +96,10 @@ class NavigationPanel(QFrame):
         self.returnButton.clicked.connect(self.history.pop)
 
         # add tool tip
-        self.returnButton.installEventFilter(ToolTipFilter(self.returnButton, 1000))
+        self.returnButton.installEventFilter(ToolTipFilter(self.returnButton, 200))
         self.returnButton.setToolTip(self.tr('Back'))
 
-        self.menuButton.installEventFilter(ToolTipFilter(self.menuButton, 1000))
+        self.menuButton.installEventFilter(ToolTipFilter(self.menuButton, 200))
         self.menuButton.setToolTip(self.tr('Open Navigation'))
 
         self.scrollWidget.setObjectName('scrollWidget')
@@ -109,13 +109,13 @@ class NavigationPanel(QFrame):
 
     def __initLayout(self):
         self.vBoxLayout.setContentsMargins(0, 5, 0, 5)
-        self.topLayout.setContentsMargins(4, 0, 4, 0)
-        self.bottomLayout.setContentsMargins(4, 0, 4, 0)
-        self.scrollLayout.setContentsMargins(4, 0, 4, 0)
-        self.vBoxLayout.setSpacing(4)
-        self.topLayout.setSpacing(4)
-        self.bottomLayout.setSpacing(4)
-        self.scrollLayout.setSpacing(4)
+        self.topLayout.setContentsMargins(3, 0, 3, 0)
+        self.bottomLayout.setContentsMargins(3, 0, 3, 0)
+        self.scrollLayout.setContentsMargins(3, 0, 3, 0)
+        self.vBoxLayout.setSpacing(5)
+        self.topLayout.setSpacing(5)
+        self.bottomLayout.setSpacing(0)
+        self.scrollLayout.setSpacing(5)
 
         self.vBoxLayout.addLayout(self.topLayout, 0)
         self.vBoxLayout.addWidget(self.scrollArea, 1, Qt.AlignTop)
@@ -198,7 +198,7 @@ class NavigationPanel(QFrame):
 
         if tooltip:
             widget.setToolTip(tooltip)
-            widget.installEventFilter(NavigationToolTipFilter(widget, 1000))
+            widget.installEventFilter(NavigationToolTipFilter(widget, 200))
 
         self._addWidgetToLayout(widget, position)
 
@@ -268,7 +268,7 @@ class NavigationPanel(QFrame):
 
         # determine the display mode according to the width of window
         # https://learn.microsoft.com/en-us/windows/apps/design/controls/navigationview#default
-        expandWidth = 1007 + self.expandWidth - 322
+        expandWidth = 1207 + self.expandWidth - 322
         if self.window().width() > expandWidth and not self.isMinimalEnabled:
             self.displayMode = NavigationDisplayMode.EXPAND
         else:
@@ -284,7 +284,7 @@ class NavigationPanel(QFrame):
 
         self.displayModeChanged.emit(self.displayMode)
         self.expandAni.setStartValue(
-            QRect(self.pos(), QSize(48, self.height())))
+            QRect(self.pos(), QSize(66, self.height())))
         self.expandAni.setEndValue(
             QRect(self.pos(), QSize(self.expandWidth, self.height())))
         self.expandAni.start()
@@ -297,7 +297,7 @@ class NavigationPanel(QFrame):
         self.expandAni.setStartValue(
             QRect(self.pos(), QSize(self.width(), self.height())))
         self.expandAni.setEndValue(
-            QRect(self.pos(), QSize(48, self.height())))
+            QRect(self.pos(), QSize(66, self.height())))
         self.expandAni.setProperty('expand', False)
         self.expandAni.start()
 
@@ -341,7 +341,7 @@ class NavigationPanel(QFrame):
         th = self.topLayout.minimumSize().height()
         bh = self.bottomLayout.minimumSize().height()
         h = self.height()-th-bh-20
-        self.scrollArea.setFixedHeight(max(h, 36))
+        self.scrollArea.setFixedHeight(max(h, 66))
 
     def eventFilter(self, obj, e: QEvent):
         if obj is not self.window():
@@ -352,9 +352,9 @@ class NavigationPanel(QFrame):
                 self.collapse()
         elif e.type() == QEvent.Resize:
             w = QResizeEvent(e).size().width()
-            if w < 1008 and self.displayMode == NavigationDisplayMode.EXPAND:
+            if w < 1208 and self.displayMode == NavigationDisplayMode.EXPAND:
                 self.collapse()
-            elif w >= 1008 and self.displayMode == NavigationDisplayMode.COMPACT and \
+            elif w >= 1208 and self.displayMode == NavigationDisplayMode.COMPACT and \
                     not self._isMenuButtonVisible:
                 self.expand()
 
